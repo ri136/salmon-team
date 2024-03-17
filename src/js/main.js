@@ -1,19 +1,25 @@
-var canvas, g;
-var fps = 60;
+var g, scene, ;
+const fps = 60;
 
-const Scenes = {};
+const Scenes = {
+	title: "タイトル",
+	settings: "設定",
+	standings: "順位表",
+	result: "結果"
+};
 
 /* Webページ読み込み時の処理 */
 onload = function() {
-	canvas = document.getElementById("gamecanvas");
+	const canvas = document.getElementById("gamecanvas");
 	g = canvas.getContext("2d");
 	init();
 	setInterval("gameloop()", 1000 / fps);
-
 	console.log("maguro oisii");
 };
 
-function init() {}
+function init(){
+	scene = Scenes.title;
+}
 
 /* ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- o
 ❁ Main
@@ -23,6 +29,11 @@ function init() {}
 o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 
 function gameloop() {
+	switch(scene){
+		case Scenes.title:
+
+			break;
+	}
 	update();
 	draw();
 }
@@ -34,12 +45,3 @@ function draw() {}
 /* ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- o
 ❁ functions
 o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
-
-/* ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- o
-❁ classes
-	- Sprite  基本的なオブジェクトのクラス
-o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
-
-class Sprite {
-	constructor() {}
-}
