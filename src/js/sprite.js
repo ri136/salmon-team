@@ -11,6 +11,8 @@ class Sprite {
 		this.height = height;
 		this.width = width;
 		this.shape = "rectangle"; // ellipse: 楕円, rectangle: 長方形
+
+		this.draw = function(){}; // 
 	}
 	isPointInsideShape(pointY, pointX){
 		/* (y,x)がオブジェクト内かを判定する*/ 
@@ -31,5 +33,33 @@ class Sprite {
 				break;
 		}
 	}
-	draw(){} //描写する関数
+}
+
+// テキストボックス
+class TextBox extends Sprite{
+	constructor(posY, posX, height, width, shape, text){
+		super(posY, posX, height, width, shape);
+		this.text = text;
+	}
+}
+
+// 阿弥陀如来
+class Amida extends Sprite{
+	constructor(posY, posX, height, width, shape){
+		super(posY, posX, height, width, shape);
+	}
+} 
+
+// 敵
+class Enemy extends Sprite{
+	constructor(posY, posX, height, width, shape){
+		super(posY, posX, height, width, shape);
+	}
+}
+
+// ボタン
+class Button extends Sprite{
+	constructor(posY, posX, height, width, shape){
+		super(posY, posX, height, width, shape);
+	}
 }
