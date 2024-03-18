@@ -1,7 +1,7 @@
 const fps = 60;
-const canvasSize=[480, 640];
+const canvasSize=[640, 480];
 
-const SCENES = {
+const scenes = {
 	title: "タイトル",
 	settings: "設定",
 	standings: "順位表",
@@ -14,7 +14,7 @@ let objects = {};  //
 
 /* Webページ読み込み時の処理 */
 window.onload = function() {
-	var canvas = document.getElementById("gamecanvas");
+	const canvas = document.getElementById("gamecanvas");
 	g = canvas.getContext("2d");
 	init();
 	setInterval("gameloop()", 1000 / fps);
@@ -22,7 +22,7 @@ window.onload = function() {
 };
 
 function init(){
-	scene = SCENES.title;
+	scene = scenes.title;
 	titleOnLoad(g);
 	console.log("ebi mo oisii");
 }
@@ -30,10 +30,10 @@ function init(){
 // マウスクリック イベントリスナー
 // canvasに対する相対座標をclickPosに格納する
 document.addEventListener("click", function(e){
-	var rect = e.target.getBoundingClientRect();
-    var y = e.clientY - rect.top;
-	var x = e.clientX - rect.left;
-	clickPos.push([y,x]);
+	const rect = e.target.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+	const x = e.clientX - rect.left;
+	clickPos.push([x,y]);
 }, false);
 
 
@@ -46,7 +46,7 @@ o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 
 function gameloop() {
 	switch(scene){
-		case SCENES.title:
+		case scenes.title:
 			titleDraw(g);
 			break;
 	}
