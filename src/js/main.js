@@ -3,6 +3,7 @@ const canvasSize=[640, 480];
 
 const scenes = {
 	title: "タイトル",
+	game: "ゲーム",
 	settings: "設定",
 	standings: "順位表",
 	result: "結果"
@@ -11,11 +12,24 @@ const scenes = {
 let g, scene;      // 
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
 let objects = {};  // 
+let input = [];
 
 /* Webページ読み込み時の処理 */
 window.onload = function() {
+	// canvas
 	const canvas = document.getElementById("gamecanvas");
 	g = canvas.getContext("2d");
+	g.imageSmoothingEnabled = true;
+	
+	// font読み込み
+	//   azuki_font
+	var fontFace = new FontFace('azuki_font', 'url(./src/fonts/azuki.ttf)', { style: 'normal', weight: 700});
+	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
+	//   07LightNovelPOP
+	var fontFace = new FontFace('LightNovelPOP', 'url(./src/fonts/LightNovelPOPv2.otf)', { style: 'normal', weight: 700});
+	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
+
+	// ゲーム開始
 	init();
 	setInterval("gameloop()", 1000 / fps);
 	console.log("maguro oisii");
@@ -36,6 +50,13 @@ document.addEventListener("click", function(e){
 	clickPos.push([x,y]);
 }, false);
 
+// キー入力
+document.addEventListener('keydown', function(e){
+	e.preventDefault();
+	console.log(e);
+	input.push(e);
+});
+
 
 /* ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- o
 ❁ Main
@@ -47,8 +68,13 @@ o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 function gameloop() {
 	switch(scene){
 		case scenes.title:
-			titleDraw(g);
+			titleUpdate();
+			titleDraw();
 			break;
+		case scenes.game:
+			gameUpdate();
+			gameDraw();
+			break
 	}
 	update();
 	draw();

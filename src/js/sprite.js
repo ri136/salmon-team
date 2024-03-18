@@ -12,6 +12,7 @@ class Sprite {
 		this.width = width;
 		this.shape = shape; // 当たり判定に使う ellipse: 楕円, rectangle: 長方形
 		this.draw = function(){}; //
+		this.onClick = function(){return false;}; // クリック時の動作
 	}
 	isPointInsideShape(pointX, pointY){
 		/* (y,x)がオブジェクト内かを判定する*/ 
@@ -24,6 +25,8 @@ class Sprite {
 				}
 				break;
 			case "rectangle":
+				console.log(this.posY, pointY)
+				console.log(this.posY<=pointY, pointY<=this.posY+this.height, this.posX<=pointX, pointX<=this.posX+this.width);
 				if (this.posY<=pointY && pointY<=this.posY+this.height && this.posX<=pointX && pointX<=this.posX+this.width){
 					return true;
 				}else{
@@ -51,6 +54,8 @@ class TextBox extends Sprite{
 	constructor(posX, posY, width, height, shape, text){
 		super(posX, posY, width, height, shape);
 		this.text = text;
+		this.font = "";
+		this.drawText = function(){};
 	}
 }
 
