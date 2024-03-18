@@ -1,8 +1,5 @@
-
 const fps = 60;
 const canvasSize=[480, 640]
-
-
 
 const Scenes = {
 	title: "タイトル",
@@ -10,6 +7,7 @@ const Scenes = {
 	standings: "順位表",
 	result: "結果"
 };
+
 let g, scene; // 
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
 let objects = {};  //  
@@ -25,6 +23,7 @@ window.onload = function() {
 
 function init(){
 	scene = Scenes.title;
+	titleOnLoad(g);
 }
 
 // マウスクリック イベントリスナー
@@ -47,7 +46,7 @@ o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 function gameloop() {
 	switch(scene){
 		case Scenes.title:
-			titleUpdate(g);
+			titleDraw(g);
 			break;
 	}
 	update();
