@@ -47,7 +47,7 @@ o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 function gameloop() {
 	switch(scene){
 		case SCENES.title:
-			// titleDraw(g);
+			titleDraw(g);
 			break;
 	}
 	update();
