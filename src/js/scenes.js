@@ -1,5 +1,6 @@
-// title画面について
+// title画面
 function titleOnLoad(g){
+	objects = {};
 	/* 別画面からタイトル画面へ移動したとき */
 	const bgImageSrc = "./src/img/background01.png"
 	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
@@ -41,11 +42,9 @@ function titleOnLoad(g){
 	//   文字フォント, 文字色
 	const buttonTextColor1 = "#fff";
 	const buttonTextFont = "18px azuki_font";
-	const buttonTextLineWidth = 1;
 	let buttonDrawText = function(){
 		g.font = buttonTextFont;
 		g.fillStyle = buttonTextColor1;
-		g.lineWidth = buttonTextLineWidth;
 		g.textBaseline = "middle"; // 基準をテキストの上下中央に
 		g.textAlign = "center"; // 基準をテキストの左右中央に
 		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
@@ -59,6 +58,8 @@ function titleOnLoad(g){
 	objects.buttons.startButton.text = "スタート"
 	objects.buttons.startButton.onClick = function(){
 		this.text = "!"+this.text+"!";
+		scene = scenes.game;
+		gameOnload();
 	}
 	//   rankingButton
 	objects.buttons.rankingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*1, buttonWidth, buttonHeight, "rectangle")
@@ -103,5 +104,57 @@ function titleDraw(){
 
 // ゲーム画面
 function gameOnload(){
+	objects = {};
+	input = [];
+	/* 別画面からゲーム画面へ移動したとき */
+	const bgImageSrc = "./src/img/background01.png"
+	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
 
+	// 例文表示
+	// 外枠
+	//   サイズ
+	const typingBoxWidth = 514;
+	const typingBoxHeight = 100;
+	//    色
+	const typingBoxColor1 = "rgba(0,0,0,0.4)";
+	const typingBoxColor2 = "#FFF";
+	const typingBoxLineWidth = 1;
+	const typingBoxDraw = function(){
+		g.fillStyle = typingBoxColor1;
+		g.strokeStyle = typingBoxColor2;
+		g.lineWidth = typingBoxLineWidth;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.fill();
+		g.stroke();
+	}
+	//     文字
+	const typingBoxTextColor1 = "#FFF";
+	const typingBoxTextFont = "18px azuki_font";
+	const typingBoxdrawText = function(){
+		g.font = typingBoxTextFont;
+		g.fillStyle = typingBoxTextColor1;
+		g.textBaseline = "middle"; // 基準をテキストの上下中央に
+		g.textAlign = "center"; // 基準をテキストの左右中央に
+		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
+	}
+
+	objects.typingBox = new TextBox(canvasSize[0]/2-typingBoxWidth/2, 52, typingBoxWidth, typingBoxHeight, "rectangle", "");
+	objects.typingBox.draw = typingBoxDraw;
+	objects.typingBox.drawText = typingBoxdrawText;
+}
+function gameUpdate(){
+	/* タイトル画面の動作処理 */
+	// キーボード処理
+	for(let i=0; i<input.length;i++){
+		objects.typingBox.text += input[i];
+	}
+	input = [];
+}
+function gameDraw(){
+	// BackGroundImage
+	objects.bgImage.draw();
+
+	// typingBox
+	objects.typingBox.draw();
+	objects.typingBox.drawText();
 }
