@@ -57,6 +57,9 @@ function titleOnLoad(g){
 	objects.buttons.startButton.draw  = buttonDraw;
 	objects.buttons.startButton.drawText = buttonDrawText;
 	objects.buttons.startButton.text = "スタート"
+	objects.buttons.startButton.onClick = function(){
+		this.text = "!"+this.text+"!";
+	}
 	//   rankingButton
 	objects.buttons.rankingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*1, buttonWidth, buttonHeight, "rectangle")
 	objects.buttons.rankingButton.draw = buttonDraw;
