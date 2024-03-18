@@ -14,8 +14,33 @@ let objects = {};  //
 
 /* Webページ読み込み時の処理 */
 window.onload = function() {
+	// canvas
 	const canvas = document.getElementById("gamecanvas");
 	g = canvas.getContext("2d");
+	g.imageSmoothingEnabled = true;
+	
+	// font読み込み
+	//   azuki_font
+	var fontFace = new FontFace(
+	  'azuki_font', 
+	  'url(./src/fonts/azuki.ttf)', 
+	  { style: 'normal', weight: 700}
+	);
+	fontFace.load().then(function(loadedFace){
+	  document.fonts.add(loadedFace);
+	}).catch(function(e){});
+
+	//   07LightNovelPOP
+	var fontFace = new FontFace(
+	  'LightNovelPOP', 
+	  'url(./src/fonts/LightNovelPOPv2.otf)', 
+	  { style: 'normal', weight: 700}
+	);
+	fontFace.load().then(function(loadedFace){
+	  document.fonts.add(loadedFace);
+	}).catch(function(e){});
+
+	// ゲーム開始
 	init();
 	setInterval("gameloop()", 1000 / fps);
 	console.log("maguro oisii");
