@@ -3,9 +3,25 @@ function titleOnLoad(g){
 	const bgImageSrc = "./src/img/background01.png"
 	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
 
+	// タイトル 表示
+	const titleWidth = 300;
+	const titleHeight = 75;
+	objects.title = new TextBox(canvasSize[0]/2-titleWidth/2, 72, titleWidth, titleHeight, "rectangle");
+
+	objects.title.text = "阿弥打";
+	objects.title.font = "75px azuki_font";
+	let titleColor = "#FFF";
+	objects.title.drawText = function(){
+		g.font = this.font;
+		g.fillStyle = titleColor;
+		g.textBaseline = "middle"; // 基準をテキストの上下中央に
+		g.textAlign = "center"; // 基準をテキストの左右中央に
+		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
+	}
+
 	// ボタン配置
 	objects.buttons = {};
-	// 中央 ボタン(スタート, ランキング, 設定)
+	// 中央 ボタン(スタート, ランキング, 設定) 共通部分
 	//   サイズ
 	let buttonWidth = 150;
 	let buttonHeight = 40;
@@ -23,18 +39,15 @@ function titleOnLoad(g){
 	};
 	//   文字フォント, 文字色
 	const buttonTextColor1 = "#fff";
-	const buttonTextColor2 = "#000";
 	const buttonTextFont = "18px azuki_font";
 	const buttonTextLineWidth = 1;
 	let buttonDrawText = function(){
 		g.font = buttonTextFont;
 		g.fillStyle = buttonTextColor1;
-		g.strokeStyle = buttonTextColor2;
 		g.lineWidth = buttonTextLineWidth;
 		g.textBaseline = "middle"; // 基準をテキストの上下中央に
 		g.textAlign = "center"; // 基準をテキストの左右中央に
 		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
-		// g.strokeText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
 	}
 
 	// objects に追加
@@ -59,6 +72,8 @@ function titleOnLoad(g){
 function titleDraw(g){
 	// BackGroundImage
 	objects.bgImage.draw();
+	// title
+	objects.title.drawText()
 
 	// 中央 ボタン
 	objects.buttons.startButton.draw();

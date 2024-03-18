@@ -51,6 +51,8 @@ class TextBox extends Sprite{
 	constructor(posX, posY, width, height, shape, text){
 		super(posX, posY, width, height, shape);
 		this.text = text;
+		this.font = "";
+		this.drawText = function(){};
 	}
 }
 
