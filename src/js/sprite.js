@@ -4,8 +4,8 @@
 	  -
 o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 class Sprite {
-	/* すべてのオブジェクトはこのクラスを継承している */
-	constructor(posY, posX, width, height, shape){
+	/* すべてのオブジェクトはこのクラスを継承している (このコメント好き) */
+	constructor(posX, posY, width, height, shape){
 		this.posX = posX;
 		this.posY = posY;
 		this.height = height;
@@ -14,7 +14,7 @@ class Sprite {
 
 		this.draw = function(){}; // 
 	}
-	isPointInsideShape(pointY, pointX){
+	isPointInsideShape(pointX, pointY){
 		/* (y,x)がオブジェクト内かを判定する*/ 
 		switch(this.shape){
 			case "ellipse":
@@ -37,9 +37,9 @@ class Sprite {
 
 // 画像
 class ImageBox extends Sprite{
-	constructor(posY, posX, width, height, shape, src){
-		super(posY, posX, width, height, shape);
-		var img = new Image();
+	constructor(posX, posY, width, height, shape, src){
+		super(posX, posY, width, height, shape);
+		let img = new Image();
 		img.src = src
 		this.draw = function(){
 			g.drawImage(img, this.posX, this.posY, this.width, this.height);
@@ -49,29 +49,29 @@ class ImageBox extends Sprite{
 
 // テキストボックス
 class TextBox extends Sprite{
-	constructor(posY, posX, width, height, shape, text){
-		super(posY, posX, width, height, shape);
+	constructor(posX, posY, width, height, shape, text){
+		super(posX, posY, width, height, shape);
 		this.text = text;
 	}
 }
 
 // 阿弥陀如来
 class Amida extends Sprite{
-	constructor(posY, posX, width, height, shape){
-		super(posY, posX, width, height, shape);
+	constructor(posX, posY, width, height, shape){
+		super(posX, posY, width, height, shape);
 	}
 } 
 
 // 敵
 class Enemy extends Sprite{
-	constructor(posY, posX, width, height, shape){
-		super(posY, posX, width, height, shape);
+	constructor(posX, posY, width, height, shape){
+		super(posX, posY, width, height, shape);
 	}
 }
 
 // ボタン
 class Button extends Sprite{
-	constructor(posY, posX, height, width, shape){
-		super(posY, posX, width, height, shape);
+	constructor(posX, posY, width, height, shape, color){
+		super(posX, posY, width, height, shape);
 	}
 }
