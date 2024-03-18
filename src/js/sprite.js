@@ -71,7 +71,7 @@ class Enemy extends Sprite{
 
 // ボタン
 class Button extends Sprite{
-	constructor(posX, posY, width, height, shape, color){
+	constructor(posX, posY, width, height, shape){
 		super(posX, posY, width, height, shape);
 	}
 }
