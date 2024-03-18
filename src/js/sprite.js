@@ -10,9 +10,8 @@ class Sprite {
 		this.posY = posY;
 		this.height = height;
 		this.width = width;
-		this.shape = "rectangle"; // ellipse: 楕円, rectangle: 長方形
-
-		this.draw = function(){}; // 
+		this.shape = shape; // 当たり判定に使う ellipse: 楕円, rectangle: 長方形
+		this.draw = function(){}; //
 	}
 	isPointInsideShape(pointX, pointY){
 		/* (y,x)がオブジェクト内かを判定する*/ 
@@ -40,7 +39,7 @@ class ImageBox extends Sprite{
 	constructor(posX, posY, width, height, shape, src){
 		super(posX, posY, width, height, shape);
 		let img = new Image();
-		img.src = src
+		img.src = src;
 		this.draw = function(){
 			g.drawImage(img, this.posX, this.posY, this.width, this.height);
 		};
@@ -73,5 +72,9 @@ class Enemy extends Sprite{
 class Button extends Sprite{
 	constructor(posX, posY, width, height, shape){
 		super(posX, posY, width, height, shape);
+
+		this.text = "";
+		this.font = "";
+		this.drawText = function(){};
 	}
 }

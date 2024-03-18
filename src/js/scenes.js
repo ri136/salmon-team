@@ -19,15 +19,33 @@ function titleOnLoad(g){
 		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
 		g.fill();
 		g.stroke();
-
-		// g.fillRect(this.posX, this.posY, this.width, this.height);
 	};
+	const buttonTextColor1 = "#FFF";
+	const buttonTextColor2 = "#000";
+	let buttonDrawText = function(){
+		g.font = this.font;
+		g.fillStyle = buttonTextColor1;
+		g.strokeStyle = buttonTextColor2;
+		g.textBaseline = "middle"; // 基準をテキストの上下中央に
+		g.textAlign = "center"; // 基準をテキストの左右中央に
+		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
+		g.strokeText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
+		g.textBaseline = null;
+		console.log(g.textBaseline)
+	}
+	// startButton
 	objects.buttons.startButton   = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*0, buttonWidth, buttonHeight, "rectangle")
-	objects.buttons.startButton.draw   = buttonDraw;
+	objects.buttons.startButton.draw  = buttonDraw;
+	objects.buttons.startButton.drawText = buttonDrawText;
+	objects.buttons.startButton.text = "START"
+	// rankingButton
 	objects.buttons.rankingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*1, buttonWidth, buttonHeight, "rectangle")
 	objects.buttons.rankingButton.draw = buttonDraw;
+	objects.buttons.rankingButton.drawText = buttonDrawText;
+	// settingButton
 	objects.buttons.settingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*2, buttonWidth, buttonHeight, "rectangle")
 	objects.buttons.settingButton.draw = buttonDraw;
+	objects.buttons.settingButton.drawText = buttonDrawText;
 
 
 }
@@ -36,7 +54,8 @@ function titleDraw(g){
 	objects.bgImage.draw();
 
 	// 中央 ボタン
-	objects.buttons.startButton.draw()
-	objects.buttons.rankingButton.draw()
-	objects.buttons.settingButton.draw()
+	objects.buttons.startButton.draw();
+	objects.buttons.startButton.drawText();
+	objects.buttons.rankingButton.draw();
+	objects.buttons.settingButton.draw();
 }
