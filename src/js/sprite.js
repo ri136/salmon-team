@@ -12,7 +12,7 @@ class Sprite {
 		this.width = width;
 		this.shape = shape; // 当たり判定に使う ellipse: 楕円, rectangle: 長方形
 		this.draw = function(){}; //
-		this.onClick = function(){console.log(this)}; // クリック時の動作
+		this.onClick = function(){return false;}; // クリック時の動作
 	}
 	isPointInsideShape(pointX, pointY){
 		/* (y,x)がオブジェクト内かを判定する*/ 

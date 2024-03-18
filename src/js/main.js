@@ -12,7 +12,7 @@ const scenes = {
 let g, scene;      // 
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
 let objects = {};  // 
-let input = []
+let input = [];
 
 /* Webページ読み込み時の処理 */
 window.onload = function() {
@@ -51,8 +51,10 @@ document.addEventListener("click", function(e){
 }, false);
 
 // キー入力
-document.addEventListener('keypress', function(e){
-	input.push(e.key);
+document.addEventListener('keydown', function(e){
+	e.preventDefault();
+	console.log(e);
+	input.push(e);
 });
 
 

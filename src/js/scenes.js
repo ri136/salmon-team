@@ -60,6 +60,7 @@ function titleOnLoad(g){
 		this.text = "!"+this.text+"!";
 		scene = scenes.game;
 		gameOnload();
+		return true;
 	}
 	//   rankingButton
 	objects.buttons.rankingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*1, buttonWidth, buttonHeight, "rectangle")
@@ -81,7 +82,8 @@ function titleUpdate(){
 		for(btnName in objects.buttons){
 			/* オブジェクトに被った場所をクリックしていたらイベントを実行する */
 			if(objects.buttons[btnName].isPointInsideShape(clickPos[i][0], clickPos[i][1])){
-				objects.buttons[btnName].onClick();
+				let flg = objects.buttons[btnName].onClick(); // 画面遷移がある場合はreturn がtrue
+				if(flg){break;}
 			}
 		}
 	}
@@ -91,7 +93,7 @@ function titleDraw(){
 	// BackGroundImage
 	objects.bgImage.draw();
 	// title
-	objects.title.drawText()
+	objects.title.drawText();
 
 	// 中央 ボタン
 	objects.buttons.startButton.draw();
@@ -146,7 +148,13 @@ function gameUpdate(){
 	/* タイトル画面の動作処理 */
 	// キーボード処理
 	for(let i=0; i<input.length;i++){
-		objects.typingBox.text += input[i];
+		if(input[i].code == "Backspace"){
+			objects.typingBox.text = objects.typingBox.text.slice(0,-1);
+		}else if(input[i].code == "Enter"){
+			objects.typingBox.text += "\r\n"
+		}else{
+			objects.typingBox.text += input[i].key;
+		}
 	}
 	input = [];
 }
