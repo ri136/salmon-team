@@ -21,24 +21,11 @@ window.onload = function() {
 	
 	// font読み込み
 	//   azuki_font
-	var fontFace = new FontFace(
-	  'azuki_font', 
-	  'url(./src/fonts/azuki.ttf)', 
-	  { style: 'normal', weight: 700}
-	);
-	fontFace.load().then(function(loadedFace){
-	  document.fonts.add(loadedFace);
-	}).catch(function(e){});
-
+	var fontFace = new FontFace('azuki_font', 'url(./src/fonts/azuki.ttf)', { style: 'normal', weight: 700});
+	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
 	//   07LightNovelPOP
-	var fontFace = new FontFace(
-	  'LightNovelPOP', 
-	  'url(./src/fonts/LightNovelPOPv2.otf)', 
-	  { style: 'normal', weight: 700}
-	);
-	fontFace.load().then(function(loadedFace){
-	  document.fonts.add(loadedFace);
-	}).catch(function(e){});
+	var fontFace = new FontFace('LightNovelPOP', 'url(./src/fonts/LightNovelPOPv2.otf)', { style: 'normal', weight: 700});
+	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
 
 	// ゲーム開始
 	init();
@@ -72,7 +59,8 @@ o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 function gameloop() {
 	switch(scene){
 		case scenes.title:
-			titleDraw(g);
+			titleUpdate();
+			titleDraw();
 			break;
 	}
 	update();

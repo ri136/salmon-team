@@ -1,5 +1,6 @@
 // title画面について
 function titleOnLoad(g){
+	/* 別画面からタイトル画面へ移動したとき */
 	const bgImageSrc = "./src/img/background01.png"
 	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
 
@@ -69,7 +70,20 @@ function titleOnLoad(g){
 
 
 }
-function titleDraw(g){
+function titleUpdate(){
+	/* タイトル画面の動作処理 */
+	// クリック処理
+	for(let i=0; i<clickPos.length;i++){
+		for(btnName in objects.buttons){
+			/* オブジェクトに被った場所をクリックしていたらイベントを実行する */
+			if(objects.buttons[btnName].isPointInsideShape(clickPos[i][0], clickPos[i][1])){
+				objects.buttons[btnName].onClick();
+			}
+		}
+	}
+	clickPos = [];
+}
+function titleDraw(){
 	// BackGroundImage
 	objects.bgImage.draw();
 	// title
@@ -82,4 +96,9 @@ function titleDraw(g){
 	objects.buttons.rankingButton.drawText();
 	objects.buttons.settingButton.draw();
 	objects.buttons.settingButton.drawText();
+}
+
+// ゲーム画面
+function gameOnload(){
+
 }
