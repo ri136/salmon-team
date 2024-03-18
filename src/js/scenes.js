@@ -10,9 +10,9 @@ function titleOnLoad(g){
 	let buttonWidth = 150;
 	let buttonHeight = 40;
 	//   色付け
-	const buttonColor1 = "#FFD29D"; // 塗りつぶす色
-	const buttonColor2 = "#AA6819"; // 輪郭の色
-	const buttonLineWidth  = 2;
+	const buttonColor1 = "rgba(0,0,0,0.5)"; // 塗りつぶす色
+	const buttonColor2 = "#FFF"; // 輪郭の色
+	const buttonLineWidth  = 1;
 	let buttonDraw = function(){
 		g.fillStyle = buttonColor1;
 		g.strokeStyle = buttonColor2;
@@ -22,9 +22,9 @@ function titleOnLoad(g){
 		g.stroke();
 	};
 	//   文字フォント, 文字色
-	const buttonTextColor1 = "#FFF";
+	const buttonTextColor1 = "#fff";
 	const buttonTextColor2 = "#000";
-	const buttonTextFont = "18px LightNovelPOP";
+	const buttonTextFont = "18px azuki_font";
 	const buttonTextLineWidth = 1;
 	let buttonDrawText = function(){
 		g.font = buttonTextFont;
@@ -34,7 +34,7 @@ function titleOnLoad(g){
 		g.textBaseline = "middle"; // 基準をテキストの上下中央に
 		g.textAlign = "center"; // 基準をテキストの左右中央に
 		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
-		g.strokeText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
+		// g.strokeText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
 	}
 
 	// objects に追加
