@@ -191,7 +191,8 @@ function gameOnload(){
 	const bossSrc = "./src/img/noumen.png";
 	objects.boss = new Boss(510, 173, bossWidth, bossHeight, "rectangle", bossSrc);
 
-	// 
+	// 敵
+	objects.enemys = [];
 
 }
 function gameUpdate(){
@@ -201,11 +202,21 @@ function gameUpdate(){
 		const pharase = pharasesJson[Math.floor(Math.random()*pharasesJson.length)];
 		console.log(pharase);
 		typingObject = new TypingObject(typingJson, pharase[0], pharase[1]);
+
+		// 敵を追加する
+		objects.boss.addEnemy();
 	}
-	/* ゲーム画面の動作処理 */
+
+	// 入力
 	typingObject.update_typing(input);
 	objects.typingBoxSrcTextBox.text = typingObject.s;
 	input = [];
+
+	// 敵
+	for(let i=0; i<objects.enemys.length; i++){
+		objects.enemys[i].move();
+	}
+
 }
 function gameDraw(){
 	// BackGroundImage
@@ -225,4 +236,9 @@ function gameDraw(){
 
 	// boss
 	objects.boss.draw();
+
+	// enemy
+	for(let i=0; i<objects.enemys.length; i++){
+		objects.enemys[i].draw();
+	}
 }

@@ -92,12 +92,31 @@ class Boss extends Sprite{
 		this.draw = function(){
 			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
 		};
+
+		// enemy
+		this.enemySrc = "./src/img/soul.png";
+		this.enemyShape = "ellipse";
+		this.enemuyWidth = 35;
+		this.enemuyHeight = 50;
+	}
+	addEnemy(){
+		var enemy = new Enemy(this.posX - 100, 233, this.enemuyWidth, this.enemuyHeight, this.enemyShape, this.enemySrc);
+		objects.enemys.push(enemy);
 	}
 }
 // 敵
 class Enemy extends Sprite{
-	constructor(posX, posY, width, height, shape){
+	constructor(posX, posY, width, height, shape, bodyImgSrc){
 		super(posX, posY, width, height, shape);
+		this.bodyImg = new Image();
+		this.bodyImg.src = bodyImgSrc;
+		this.draw = function(){
+			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
+		};
+
+		this.move = function(){
+			this.posX -= 1;
+		};
 	}
 }
 
