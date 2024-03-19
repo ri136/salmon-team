@@ -207,7 +207,7 @@ function gameUpdate(){
 		objects.boss.addEnemy();
 	}
 
-	// 入力
+	// 入力受け取り
 	typingObject.update_typing(input);
 	objects.typingBoxSrcTextBox.text = typingObject.s;
 	input = [];

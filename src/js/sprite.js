@@ -100,7 +100,7 @@ class Boss extends Sprite{
 		this.enemuyHeight = 50;
 	}
 	addEnemy(){
-		var enemy = new Enemy(this.posX - 100, 233, this.enemuyWidth, this.enemuyHeight, this.enemyShape, this.enemySrc);
+		var enemy = new Enemy(this.posX - 100, 223, this.enemuyWidth, this.enemuyHeight, this.enemyShape, this.enemySrc);
 		objects.enemys.push(enemy);
 	}
 }
@@ -115,7 +115,7 @@ class Enemy extends Sprite{
 		};
 
 		this.move = function(){
-			this.posX -= 1;
+			this.posX -= 0.3;
 		};
 	}
 }
