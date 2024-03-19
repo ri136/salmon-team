@@ -2,7 +2,7 @@
 function titleOnLoad(g){
 	objects = {};
 	/* 別画面からタイトル画面へ移動したとき */
-	const bgImageSrc = "./src/img/background01.png"
+	const bgImageSrc = "./src/img/background01.png";
 	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
 
 	// タイトル 表示
@@ -115,41 +115,74 @@ function gameOnload(){
 	// 例文表示
 	// 外枠
 	//   サイズ
-	const typingBoxWidth = 514;
-	const typingBoxHeight = 100;
+	const typingBoxBackGroundWidth = 514;
+	const typingBoxBackGroundHeight = 100;
 	//    色
-	const typingBoxColor1 = "rgba(0,0,0,0.4)";
-	const typingBoxColor2 = "#FFF";
-	const typingBoxLineWidth = 1;
-	const typingBoxDraw = function(){
-		g.fillStyle = typingBoxColor1;
-		g.strokeStyle = typingBoxColor2;
-		g.lineWidth = typingBoxLineWidth;
+	const typingBoxBackGroundColor1 = "rgba(0,0,0,0.4)";
+	const typingBoxBackGroundColor2 = "#FFF";
+	const typingBoxBackGroundLineWidth = 1;
+	const typingBoxBackGroundDraw = function(){
+		g.fillStyle = typingBoxBackGroundColor1;
+		g.strokeStyle = typingBoxBackGroundColor2;
+		g.lineWidth = typingBoxBackGroundLineWidth;
 		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
 		g.fill();
 		g.stroke();
 	}
-	//     文字
-	const typingBoxTextColor1 = "#FFF";
-	const typingBoxTextFont = "18px azuki_font";
-	const typingBoxdrawText = function(){
-		g.font = typingBoxTextFont;
-		g.fillStyle = typingBoxTextColor1;
-		g.textBaseline = "middle"; // 基準をテキストの上下中央に
-		g.textAlign = "center"; // 基準をテキストの左右中央に
-		g.fillText(this.text, this.posX + this.width/2, this.posY + this.height/2); // 中央に文字を配置
-	}
+	objects.typingBackGroundBox = new TextBox(canvasSize[0]/2-typingBoxBackGroundWidth/2, 52, typingBoxBackGroundWidth, typingBoxBackGroundHeight, "rectangle", "");
+	objects.typingBackGroundBox.draw = typingBoxBackGroundDraw;
 
-	objects.typingBox = new TextBox(canvasSize[0]/2-typingBoxWidth/2, 52, typingBoxWidth, typingBoxHeight, "rectangle", "");
-	objects.typingBox.draw = typingBoxDraw;
-	objects.typingBox.drawText = typingBoxdrawText;
+	// 漢字
+	//   サイズ
+	const typingBoxSrcTextBoxWidth = 514;
+	const typingBoxSrcTextBoxHeight = 18;
+	//   文字
+	const typingBoxSrcTextBoxColor1 = "#fff";
+	const typingBoxSrcTextBoxFont = "18px azuki_font";
+	let typingBoxSrcTextBoxDrawText = function(){
+		g.font = typingBoxSrcTextBoxFont;
+		g.fillStyle = typingBoxSrcTextBoxColor1;
+		g.textBaseline = "top"; // 基準をテキストの上下中央に
+		g.textAlign = "center"; // 基準をテキストの左右中央に
+		g.fillText(this.text, this.posX+this.width/2, this.posY); // 中央に文字を配置
+	}
+	objects.typingBoxSrcTextBox = new TextBox(canvasSize[0]/2-typingBoxSrcTextBoxWidth/2, 70, typingBoxBackGroundWidth, typingBoxSrcTextBoxHeight, "rectangle", "");
+	objects.typingBoxSrcTextBox.drawText = typingBoxSrcTextBoxDrawText;
+	// ローマ字
+	//   サイズ
+	const typingBoxAlpWidth = 514;
+	const typingBoxAlpHeight = 18;
+	//   文字
+	const typingBoxAlpTypedColor1 = "#fff";
+	const typingBoxAlpCandidateColor1 = "#aaa";
+	const typingBoxAlpFont = "18px azuki_font";
+	const typingBoxAlpDrawText = function(){
+		// TypedとCandidateのテキストの長さを取得
+		g.font = typingBoxAlpFont;
+		const typedTextWidth = g.measureText(typingObject.typed_alphabets).width;
+		g.font = typingBoxAlpFont;
+		const CandidateTextWidth = g.measureText(typingObject.best_alphabets_candidate).width;
+		// 描画
+		g.textAlign = "left";
+		g.textBaseline = "top";
+		g.font = typingBoxAlpFont;
+		g.fillStyle = typingBoxAlpTypedColor1;
+		g.fillText(typingObject.typed_alphabets, this.posX+this.width/2-(typedTextWidth+CandidateTextWidth)/2, this.posY);
+		g.font = typingBoxAlpFont;
+		g.fillStyle = typingBoxAlpCandidateColor1;
+		g.fillText(typingObject.best_alphabets_candidate, this.posX+this.width/2-(-typedTextWidth+CandidateTextWidth)/2, this.posY);
+	}
+	objects.typingBoxAlp = new TextBox(canvasSize[0]/2-typingBoxAlpWidth/2, 116, typingBoxAlpWidth, typingBoxAlpHeight, "rectangle", "")
+	objects.typingBoxAlp.drawText = typingBoxAlpDrawText;
 }
 function gameUpdate(){
+	// 入力し終えたら次の文へ
+	if(typingObject.best_alphabets_candidate == ""){
+		typingObject = new TypingObject(typingJson, "福岡県北九州市小倉北区馬借", "ふくおかけんきたきゅうしゅうしこくらきたくばしゃく");
+	}
 	/* タイトル画面の動作処理 */
 	typingObject.update_typing(input);
-	objects.typingBox.text = s;
-	typed = objects.typingBox.typed_alphabets;
-	
+	objects.typingBoxSrcTextBox.text = typingObject.s;
 	input = [];
 }
 function gameDraw(){
@@ -157,6 +190,7 @@ function gameDraw(){
 	objects.bgImage.draw();
 
 	// typingBox
-	objects.typingBox.draw();
-	objects.typingBox.drawText();
+	objects.typingBackGroundBox.draw(); // 背景
+	objects.typingBoxSrcTextBox.drawText(); // 漢字
+	objects.typingBoxAlp.drawText();
 }
