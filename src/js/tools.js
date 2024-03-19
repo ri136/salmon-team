@@ -15,6 +15,9 @@ function createRoundRectPath(posX, posY, width, height, radius){
 }
 
 class TypingObject {
+    // d: {"か": ["ka", "ca"]}などのかな→アルファベットの変換
+    // s: そのままの文字列  例: 「フーリエ変換」
+    // kana: ひらがなに変換した後の文字列  例: 「ふーりえへんかん」
     constructor(d, s, kana) {
         this.d = d;
         this.s = s;
@@ -27,6 +30,11 @@ class TypingObject {
         this.is_all_typed = false;
     }
 
+    // ひらがなでいうa文字目から連続したb文字のグループについて、その「かな→ローマ字」の変換があるのならそれを返す
+    // s_kanaは全てひらがなの文字列
+    // 例: しゅ→syu,shu
+    // 例2: か→ka,ca
+    // 注意: 「かん」などの変換はない。あくまでも一気に打てるもののみ
     get_romazi_candidates(a, b, s_kana) {
         let candidates = [];
         if (a + b - 1 >= s_kana.length) return candidates;
@@ -39,6 +47,9 @@ class TypingObject {
         return candidates;
     }
 
+    // 始点を一番最後に打ち終わったひらがなのindexにしたとき、そこからのかたまりがあればそれのローマ字変換の一覧を返す。
+    // kana_last_idxは、get_romazi_candidates()のaと同じである。
+    // get_romazi_candidates()より適用範囲が広く、α文字目が「ん」や「っ」である場合にも対応している。
     get_group_candidates(kana_last_idx, s_kana) {
         let row_a = new Set(["あ", "い", "う", "え", "お"]);
         let row_na = new Set(["な", "に", "ぬ", "ね", "の"]);
@@ -59,6 +70,7 @@ class TypingObject {
         return candidates;
     }
 
+    // まだ打っていない文字の中で、もっとも良いアルファベットの打ち方を返す。
     get_untyped_best_candidate(kana_last_idx, next_group_candidates, s_kana) {
         let best_untyped_alphabets = "";
         if (next_group_candidates.length > 0) {
@@ -74,6 +86,8 @@ class TypingObject {
         return best_untyped_alphabets;
     }
 
+    // 入力したアルファベット(downkeys)を渡せば、打たれた正しいアルファベットの文字列や、まだ打っていない文字の中で、
+    // 最も良いアルファベットの文字列などの、諸々のクラスの変数値が更新される。
     update_typing(input_alphas) {
         for (let input_alpha of input_alphas) {
             if (this.candidates.length === 0) this.candidates = this.get_group_candidates(this.kana_last_idx, this.s_kana);
