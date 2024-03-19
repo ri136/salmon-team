@@ -41,10 +41,10 @@ class Sprite {
 class ImageBox extends Sprite{
 	constructor(posX, posY, width, height, shape, src){
 		super(posX, posY, width, height, shape);
-		let img = new Image();
-		img.src = src;
+		this.img = new Image();
+		this.img.src = src;
 		this.draw = function(){
-			g.drawImage(img, this.posX, this.posY, this.width, this.height);
+			g.drawImage(this.img, this.posX, this.posY, this.width, this.height);
 		};
 	}
 }
@@ -61,11 +61,39 @@ class TextBox extends Sprite{
 
 // 阿弥陀如来
 class Amida extends Sprite{
-	constructor(posX, posY, width, height, shape){
+	constructor(posX, posY, width, height, shape, bodyImgSrc){
 		super(posX, posY, width, height, shape);
+		this.bodyImg = new Image();
+		this.bodyImg.src = bodyImgSrc;
+		this.draw = function(){
+			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
+		};
+
+		this.health = 3;
+		this.heartPosX = 15;
+		this.heartPosY = 15;
+		this.heartSpace = 30;
+		this.heartSize = 22; // 横幅のみ
+		this.heartImg = new Image();
+		this.heartImg.src = "./src/img/self_heart.png";
+		this.healthDraw = function(){
+			for(let i=0; i<this.health; i++){
+				g.drawImage(this.heartImg, this.heartPosX+i*this.heartSpace, this.heartPosY, this.heartSize, Math.floor(this.heartImg.naturalHeight*(this.heartSize/this.heartImg.naturalWidth)));
+			}
+		}
 	}
 } 
-
+// 敵
+class Boss extends Sprite{
+	constructor(posX, posY, width, height, shape, bodyImgSrc){
+		super(posX, posY, width, height, shape);
+		this.bodyImg = new Image();
+		this.bodyImg.src = bodyImgSrc;
+		this.draw = function(){
+			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
+		};
+	}
+}
 // 敵
 class Enemy extends Sprite{
 	constructor(posX, posY, width, height, shape){

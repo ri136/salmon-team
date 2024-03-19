@@ -72,8 +72,6 @@ function titleOnLoad(g){
 	objects.buttons.settingButton.draw = buttonDraw;
 	objects.buttons.settingButton.drawText = buttonDrawText;
 	objects.buttons.settingButton.text = "設定"
-
-
 }
 function titleUpdate(){
 	/* タイトル画面の動作処理 */
@@ -174,6 +172,27 @@ function gameOnload(){
 	}
 	objects.typingBoxAlp = new TextBox(canvasSize[0]/2-typingBoxAlpWidth/2, 116, typingBoxAlpWidth, typingBoxAlpHeight, "rectangle", "")
 	objects.typingBoxAlp.drawText = typingBoxAlpDrawText;
+
+	// キーボード
+	const keyBoardImgWidth = 514;
+	const keyBoardImgHeight = 174;
+	const keyBoardImgSrc = "./src/img/keyboard.png"
+	objects.keyBoardImg = new ImageBox(canvasSize[0]/2-keyBoardImgWidth/2, 294, keyBoardImgWidth, keyBoardImgHeight, "rectangle", keyBoardImgSrc);
+
+	// 阿弥陀
+	const amidaWidth = 55;
+	const amidaHeight = 100;
+	const amidaSrc = "./src/img/amida.png"
+	objects.amida = new Amida(63, 173, amidaWidth, amidaHeight, "rectangle", amidaSrc);
+
+	// ボス
+	const bossWidth = 67;
+	const bossHeight = 100;
+	const bossSrc = "./src/img/noumen.png";
+	objects.boss = new Boss(510, 173, bossWidth, bossHeight, "rectangle", bossSrc);
+
+	// 
+
 }
 function gameUpdate(){
 	// 入力し終えたら次の文へ
@@ -183,7 +202,7 @@ function gameUpdate(){
 		console.log(pharase);
 		typingObject = new TypingObject(typingJson, pharase[0], pharase[1]);
 	}
-	/* タイトル画面の動作処理 */
+	/* ゲーム画面の動作処理 */
 	typingObject.update_typing(input);
 	objects.typingBoxSrcTextBox.text = typingObject.s;
 	input = [];
@@ -196,4 +215,14 @@ function gameDraw(){
 	objects.typingBackGroundBox.draw(); // 背景
 	objects.typingBoxSrcTextBox.drawText(); // 漢字
 	objects.typingBoxAlp.drawText();
+
+	// keyBoard
+	objects.keyBoardImg.draw();
+
+	//amida
+	objects.amida.draw();
+	objects.amida.healthDraw();
+
+	// boss
+	objects.boss.draw();
 }
