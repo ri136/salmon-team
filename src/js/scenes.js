@@ -146,16 +146,10 @@ function gameOnload(){
 }
 function gameUpdate(){
 	/* タイトル画面の動作処理 */
-	// キーボード処理
-	for(let i=0; i<input.length;i++){
-		if(input[i].code == "Backspace"){
-			objects.typingBox.text = objects.typingBox.text.slice(0,-1);
-		}else if(input[i].code == "Enter"){
-			objects.typingBox.text += "\r\n"
-		}else{
-			objects.typingBox.text += input[i].key;
-		}
-	}
+	typingObject.update_typing(input);
+	objects.typingBox.text = s;
+	typed = objects.typingBox.typed_alphabets;
+	
 	input = [];
 }
 function gameDraw(){

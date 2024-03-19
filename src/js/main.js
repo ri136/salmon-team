@@ -12,10 +12,14 @@ const scenes = {
 let g, scene;      // 
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
 let objects = {};  // 
-let input = [];
+let input = []; // キー入力
+
+// ゲーム画面
+let typingJson;
+let typingObject; // まだ入力されてない文字列
 
 /* Webページ読み込み時の処理 */
-window.onload = function() {
+window.onload = async function() {
 	// canvas
 	const canvas = document.getElementById("gamecanvas");
 	g = canvas.getContext("2d");
@@ -28,6 +32,10 @@ window.onload = function() {
 	//   07LightNovelPOP
 	var fontFace = new FontFace('LightNovelPOP', 'url(./src/fonts/LightNovelPOPv2.otf)', { style: 'normal', weight: 700});
 	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
+
+	// typingJson読み込み
+	const response = await fetch('src/others/typing.json');
+	typingJson = await response.json();
 
 	// ゲーム開始
 	init();
@@ -52,9 +60,8 @@ document.addEventListener("click", function(e){
 
 // キー入力
 document.addEventListener('keydown', function(e){
-	e.preventDefault();
-	console.log(e);
-	input.push(e);
+	e.preventDefault(); // ブラウザのショートカットキーを無効にする
+	input.push(e.key);
 });
 
 
@@ -72,6 +79,10 @@ function gameloop() {
 			titleDraw();
 			break;
 		case scenes.game:
+			if(typingObject == null){
+				typingObject = new TypingObject(typingJson, "阿弥陀如来", "あみだにょらい");
+				console.log(typingObject);
+			}
 			gameUpdate();
 			gameDraw();
 			break

@@ -59,6 +59,8 @@ class TextBox extends Sprite{
 	}
 }
 
+//
+
 // 阿弥陀如来
 class Amida extends Sprite{
 	constructor(posX, posY, width, height, shape){
