@@ -95,16 +95,17 @@ function gameloop() {
 			titleUpdate();
 			break;
 		case scenes.game:
-			gameUpdate();
 			gameDraw();
+			gameUpdate();
 			break;
 		case scenes.result:
-			resultUpdate();
 			resultDraw();
+			resultUpdate();
 			break;
 		case scenes.rankings:
-			rankingUpdate();
 			rankingDraw();
+			rankingUpdate();
+			break;
 	}
 	update();
 	draw();

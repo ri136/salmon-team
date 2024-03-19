@@ -341,7 +341,41 @@ function resultOnload(){
 
 	// textBoxDrawText設定
 	objects.textTitle.drawText = resultTitleTextBoxDrawText;
-	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText = textBoxDrawText;}
+	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText = textBoxDrawText;};
+
+	// button
+	const buttonDraw = function(){
+		g.strokeStyle = textColor1;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.stroke();
+	}
+	const buttonDrawText = function(){
+		g.fillStyle = textColor1;
+		g.textAlign = "center";
+		g.textBaseline = "middle";
+		g.fillText(this.text, this.posX+this.width/2, this.posY+this.height/2);
+	}
+	// button
+	objects.buttons = [];
+	//   ランキング登録
+	const rankingButton = new Button(214, 348, 128, 34, "rectangle");
+	rankingButton.text = "ランキング登録";
+	rankingButton.draw = buttonDraw;
+	rankingButton.drawText = buttonDrawText;
+	objects.buttons.push(rankingButton);
+
+	//    リスタート
+	const restartButton = new Button(350, 348, 34, 34, "rectangle");
+	restartButton.text = "";
+	restartButton.draw = buttonDraw;
+	// objects.restartButton.drawText = buttonDrawText;
+	objects.buttons.push(restartButton);
+
+	// back
+	const backButton = new Button(392, 348, 34, 34, "rectangle");
+	backButton.text = "";
+	backButton.draw = buttonDraw;
+	objects.buttons.push(backButton);
 }
 function resultUpdate(){
 
@@ -357,6 +391,10 @@ function resultDraw(){
 	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText();}
 	// imageBox
 	for(let i=0; i<objects.imgBox.length; i++){objects.imgBox[i].draw();}
+
+	// button
+	for(let i=0; i<objects.buttons.length; i++){objects.buttons[i].draw();objects.buttons[i].drawText();}
+
 }
 
 // ランキング画面
