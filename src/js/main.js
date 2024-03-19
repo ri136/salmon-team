@@ -16,7 +16,8 @@ let input = []; // キー入力
 
 // ゲーム画面
 let typingJson;
-let typingObject; // まだ入力されてない文字列
+let pharasesJson;
+let typingObject = new TypingObject({},"",""); // まだ入力されてない文字列
 
 /* Webページ読み込み時の処理 */
 window.onload = async function() {
@@ -34,8 +35,11 @@ window.onload = async function() {
 	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
 
 	// typingJson読み込み
-	const response = await fetch('src/others/typing.json');
+	var response = await fetch('./src/others/typing.json');
 	typingJson = await response.json();
+	// typingJson読み込み
+	var response = await fetch('./src/others/phrases.json');
+	pharasesJson = await response.json();
 
 	// ゲーム開始
 	init();
@@ -79,10 +83,6 @@ function gameloop() {
 			titleDraw();
 			break;
 		case scenes.game:
-			if(typingObject == null){
-				typingObject = new TypingObject(typingJson, "阿弥陀如来", "あみだにょらい");
-				console.log(typingObject);
-			}
 			gameUpdate();
 			gameDraw();
 			break

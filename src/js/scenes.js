@@ -177,8 +177,11 @@ function gameOnload(){
 }
 function gameUpdate(){
 	// 入力し終えたら次の文へ
-	if(typingObject.best_alphabets_candidate == ""){
-		typingObject = new TypingObject(typingJson, "福岡県北九州市小倉北区馬借", "ふくおかけんきたきゅうしゅうしこくらきたくばしゃく");
+	if(typingObject.best_alphabets_candidate == ""){	
+		// pharaseJson から例文を選ぶ
+		const pharase = pharasesJson[Math.floor(Math.random()*pharasesJson.length)];
+		console.log(pharase);
+		typingObject = new TypingObject(typingJson, pharase[0], pharase[1]);
 	}
 	/* タイトル画面の動作処理 */
 	typingObject.update_typing(input);
