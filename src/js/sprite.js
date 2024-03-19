@@ -15,7 +15,7 @@ class Sprite {
 		this.onClick = function(){return false;}; // クリック時の動作
 	}
 	isPointInsideShape(pointX, pointY){
-		/* (y,x)がオブジェクト内かを判定する*/ 
+		/* (y,x)がオブジェクト内かを判定する */ 
 		switch(this.shape){
 			case "ellipse":
 				if (((pointY-this.posY)/this.height)**2+((pointX-this.posX)/this.width)**2 <= 1){
@@ -25,8 +25,6 @@ class Sprite {
 				}
 				break;
 			case "rectangle":
-				console.log(this.posY, pointY)
-				console.log(this.posY<=pointY, pointY<=this.posY+this.height, this.posX<=pointX, pointX<=this.posX+this.width);
 				if (this.posY<=pointY && pointY<=this.posY+this.height && this.posX<=pointX && pointX<=this.posX+this.width){
 					return true;
 				}else{
@@ -69,7 +67,7 @@ class Amida extends Sprite{
 			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
 		};
 
-		this.health = 3;
+		this.health = 5;
 		this.heartPosX = 15;
 		this.heartPosY = 15;
 		this.heartSpace = 30;
@@ -96,13 +94,15 @@ class Boss extends Sprite{
 		// enemy
 		this.enemySrc = "./src/img/soul.png";
 		this.enemyShape = "ellipse";
-		this.enemuyWidth = 35;
-		this.enemuyHeight = 50;
+		this.enemyWidth = 35;
+		this.enemyHeight = 50;
 	}
 	addEnemy(){
-		var enemy = new Enemy(this.posX - 100, 223, this.enemuyWidth, this.enemuyHeight, this.enemyShape, this.enemySrc);
+		var enemy = new Enemy(this.posX - 50, 223, this.enemyWidth, this.enemyHeight, this.enemyShape, this.enemySrc);
 		objects.enemys.push(enemy);
 	}
+
+
 }
 // 敵
 class Enemy extends Sprite{

@@ -17,7 +17,7 @@ let input = []; // キー入力
 // ゲーム画面
 let typingJson;
 let pharasesJson;
-let typingObject = new TypingObject({},"",""); // まだ入力されてない文字列
+let typingObject; // まだ入力されてない文字列
 
 /* Webページ読み込み時の処理 */
 window.onload = async function() {

@@ -194,10 +194,14 @@ function gameOnload(){
 	// 敵
 	objects.enemys = [];
 
+	// typingObject
+	typingObject = new TypingObject({}, "", "", );
+	typingObject.is_all_typed = true;
+
 }
 function gameUpdate(){
 	// 入力し終えたら次の文へ
-	if(typingObject.best_alphabets_candidate == ""){	
+	if(typingObject.is_all_typed){	
 		// pharaseJson から例文を選ぶ
 		const pharase = pharasesJson[Math.floor(Math.random()*pharasesJson.length)];
 		console.log(pharase);
