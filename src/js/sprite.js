@@ -67,7 +67,7 @@ class Amida extends Sprite{
 			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
 		};
 
-		this.health = 5;
+		this.health = 1;
 		this.heartPosX = 15;
 		this.heartPosY = 15;
 		this.heartSpace = 30;
@@ -110,12 +110,19 @@ class Enemy extends Sprite{
 		super(posX, posY, width, height, shape);
 		this.bodyImg = new Image();
 		this.bodyImg.src = bodyImgSrc;
+		this.isLive = true;
 		this.draw = function(){
 			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
 		};
 
 		this.move = function(){
-			this.posX -= 0.3;
+			if(this.isLive){
+				this.posX -= 1;
+			}
+		};
+
+		this.killed = function(){
+			this.isLive = false;
 		};
 	}
 }

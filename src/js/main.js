@@ -9,6 +9,14 @@ const scenes = {
 	result: "結果"
 };
 
+// 成績
+let date = new Date();
+let recordTypeCount = 0;
+let recordMissTypeCount = 0;
+let recordKillCount = 0;
+let startTime = 0;
+let endTime = 0;
+
 let g, scene;      // 
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
 let objects = {};  // 
@@ -85,7 +93,11 @@ function gameloop() {
 		case scenes.game:
 			gameUpdate();
 			gameDraw();
-			break
+			break;
+		case scenes.result:
+			resultUpdate();
+			resultDraw();
+			break;
 	}
 	update();
 	draw();

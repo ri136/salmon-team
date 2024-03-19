@@ -23,6 +23,9 @@ class TypingObject {
         this.s = s;
         this.s_kana = [...kana];
 
+        this.typeCount = 0; // 正確に打った回数
+        this.missTypeCount = 0; // ミスタイプした回数
+
         this.kana_last_idx = 0;
         this.typed_alphabets = "";
         this.candidates = this.get_group_candidates(0, this.s_kana);
@@ -113,9 +116,13 @@ class TypingObject {
             }
 
             if (this.candidates.length !== 0 && is_typed) this.candidates = new_candidates;
-            if (!is_typed) {
-                console.log("Wrong :(");
-                break;
+            // console.log(recordTypeCount, this.typeCount, this.missTypeCount);
+            if (is_typed) {
+                // タイプ
+                this.typeCount++;
+            } else {
+                // ミスタイプ
+                this.missTypeCount++;
             }
         }
 

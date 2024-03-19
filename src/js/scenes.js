@@ -193,18 +193,30 @@ function gameOnload(){
 
 	// 敵
 	objects.enemys = [];
-
+	
 	// typingObject
-	typingObject = new TypingObject({}, "", "", );
-	typingObject.is_all_typed = true;
+	typingObject = new TypingObject({}, "", "");
+
+	// recordStartTime
+	startTime = date.getTime(); // 開始時刻取得
 
 }
 function gameUpdate(){
 	// 入力し終えたら次の文へ
-	if(typingObject.is_all_typed){	
+	if(typingObject.s == "" || typingObject.best_alphabets_candidate == ""){
+		if(objects.enemys.length!=0){
+			// 倒したとき
+			// 記録
+			recordKillCount += 1;
+			objects.enemys.shift();
+		}
+
+		// 記録
+		recordTypeCount += typingObject.typeCount;
+		recordMissTypeCount += typingObject.missTypeCount;
+
 		// pharaseJson から例文を選ぶ
-		const pharase = pharasesJson[Math.floor(Math.random()*pharasesJson.length)];
-		console.log(pharase);
+		const pharase = pharasesJson["normal"][2][Math.floor(Math.random()*pharasesJson["normal"][2].length)];
 		typingObject = new TypingObject(typingJson, pharase[0], pharase[1]);
 
 		// 敵を追加する
@@ -216,9 +228,27 @@ function gameUpdate(){
 	objects.typingBoxSrcTextBox.text = typingObject.s;
 	input = [];
 
-	// 敵
+	// 敵 接触判定, 移動
+	if(objects.enemys.length!=0 && objects.enemys[0].isPointInsideShape(objects.amida.posX+objects.amida.width, objects.amida.posY+objects.amida.height*(2/3))){
+		// 接触時
+		objects.amida.health -= 1;
+		objects.enemys.shift();
+		typingObject.best_alphabets_candidate = "";
+	}
 	for(let i=0; i<objects.enemys.length; i++){
 		objects.enemys[i].move();
+	}
+
+	// 終了条件
+	if(objects.amida.health <= 0){
+		// 記録
+		date = new Date();
+		endTime = date.getTime();
+		recordTypeCount += typingObject.typeCount;
+		recordMissTypeCount += typingObject.missTypeCount;
+
+		scene = scenes.result;
+		resultOnload();
 	}
 
 }
@@ -245,4 +275,65 @@ function gameDraw(){
 	for(let i=0; i<objects.enemys.length; i++){
 		objects.enemys[i].draw();
 	}
+}
+
+//リザルト画面
+function resultOnload(){
+	objects = {};
+	input = [];
+	/* 別画面からゲーム画面へ移動したとき */
+	const bgImageSrc = "./src/img/background01.png"
+	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
+
+	// 外枠
+	//   サイズ
+	const BackGroundWidth = 280;
+	const BackGroundHeight = 335;
+	//    色
+	const BackGroundColor1 = "rgba(0,0,0,0.4)";
+	const BackGroundColor2 = "#FFF";
+	const BackGroundLineWidth = 1;
+	const BackGroundDraw = function(){
+		g.fillStyle = BackGroundColor1;
+		g.strokeStyle = BackGroundColor2;
+		g.lineWidth = BackGroundLineWidth;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.fill();
+		g.stroke();
+	}
+	objects.GroundBox = new TextBox(canvasSize[0]/2-BackGroundWidth/2, canvasSize[1]/2-BackGroundHeight/2, BackGroundWidth, BackGroundHeight, "rectangle", "");
+	objects.GroundBox.draw = BackGroundDraw;
+
+	// textBox(共通部分)
+	objects.textBox = [];
+	const textColor1 = "#fff";
+	const textFont = "16px azuki_font";
+	const textBoxDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textFont;
+		g.textAlign = "left";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX, this.posY);
+	}
+
+	// 倒した数
+	objects.textBox.push(new TextBox(212, 171, 64, 16, "rectangle", `倒した数: `));
+	objects.textBox.push(new TextBox(317, 171, 50, 16, "rectangle", `x ${recordKillCount} 個`));
+	objects.textBox.push(new TextBox(212, 203, 64, 16, "rectangle", `タイム:        ${((endTime-startTime)/1000).toFixed(2)}`));
+	objects.textBox.push(new TextBox(212, 239, 64, 16, "rectangle", `タイピング速度:  ${(recordTypeCount/((endTime-startTime)/1000)).toFixed(2)} type/s`));
+	objects.textBox.push(new TextBox(212, 275, 64, 16, "rectangle", `ミスタイプ:      ${recordMissTypeCount}回`));
+	objects.textBox.push(new TextBox(212, 311, 64, 16, "rectangle", `正確性:       ${(recordTypeCount/(recordMissTypeCount+recordTypeCount)*100).toFixed(4)} %`));
+
+	// textBoxDrawText設定
+	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText = textBoxDrawText;}
+}
+function resultUpdate(){
+}
+function resultDraw(){
+	// bgImage
+	objects.bgImage.draw();
+	// 外枠
+	objects.GroundBox.draw();
+	// textBox
+	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText();}
 }
