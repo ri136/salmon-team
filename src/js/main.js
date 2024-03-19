@@ -5,7 +5,7 @@ const scenes = {
 	title: "タイトル",
 	game: "ゲーム",
 	settings: "設定",
-	standings: "順位表",
+	rankings: "順位表",
 	result: "結果"
 };
 
@@ -37,10 +37,10 @@ window.onload = async function() {
 	// font読み込み
 	//   azuki_font
 	var fontFace = new FontFace('azuki_font', 'url(./src/fonts/azuki.ttf)', { style: 'normal', weight: 700});
-	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
+	await fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
 	//   07LightNovelPOP
 	var fontFace = new FontFace('LightNovelPOP', 'url(./src/fonts/LightNovelPOPv2.otf)', { style: 'normal', weight: 700});
-	fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
+	await fontFace.load().then(function(loadedFace){document.fonts.add(loadedFace);}).catch(function(e){});
 
 	// typingJson読み込み
 	var response = await fetch('./src/others/typing.json');
@@ -49,7 +49,11 @@ window.onload = async function() {
 	var response = await fetch('./src/others/phrases.json');
 	pharasesJson = await response.json();
 
+
 	// ゲーム開始
+	const paths = ['./src/img/background01.png', './src/img/amida.png'];
+	const promises = paths.map(path => fetch(path));
+	await Promise.all(promises)
 	init();
 	setInterval("gameloop()", 1000 / fps);
 	console.log("maguro oisii");
@@ -87,8 +91,8 @@ o ---- o ---- o ---- o ---- o ---- o ---- o ---- o ---- */
 function gameloop() {
 	switch(scene){
 		case scenes.title:
-			titleUpdate();
 			titleDraw();
+			titleUpdate();
 			break;
 		case scenes.game:
 			gameUpdate();
@@ -98,6 +102,9 @@ function gameloop() {
 			resultUpdate();
 			resultDraw();
 			break;
+		case scenes.rankings:
+			rankingUpdate();
+			rankingDraw();
 	}
 	update();
 	draw();

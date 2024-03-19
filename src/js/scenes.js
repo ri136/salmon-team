@@ -57,7 +57,6 @@ function titleOnLoad(g){
 	objects.buttons.startButton.drawText = buttonDrawText;
 	objects.buttons.startButton.text = "スタート"
 	objects.buttons.startButton.onClick = function(){
-		this.text = "!"+this.text+"!";
 		scene = scenes.game;
 		gameOnload();
 		return true;
@@ -67,6 +66,11 @@ function titleOnLoad(g){
 	objects.buttons.rankingButton.draw = buttonDraw;
 	objects.buttons.rankingButton.drawText = buttonDrawText;
 	objects.buttons.rankingButton.text = "ランキング"
+	objects.buttons.rankingButton.onClick = function(){
+		scene = scenes.rankings;
+		rankingOnload();
+		return true;
+	}
 	//   settingButton
 	objects.buttons.settingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*2, buttonWidth, buttonHeight, "rectangle")
 	objects.buttons.settingButton.draw = buttonDraw;
@@ -136,7 +140,7 @@ function gameOnload(){
 	const typingBoxSrcTextBoxHeight = 18;
 	//   文字
 	const typingBoxSrcTextBoxColor1 = "#fff";
-	const typingBoxSrcTextBoxFont = "18px azuki_font";
+	const typingBoxSrcTextBoxFont = "27px azuki_font";
 	let typingBoxSrcTextBoxDrawText = function(){
 		g.font = typingBoxSrcTextBoxFont;
 		g.fillStyle = typingBoxSrcTextBoxColor1;
@@ -153,7 +157,7 @@ function gameOnload(){
 	//   文字
 	const typingBoxAlpTypedColor1 = "#fff";
 	const typingBoxAlpCandidateColor1 = "#aaa";
-	const typingBoxAlpFont = "18px azuki_font";
+	const typingBoxAlpFont = "22px azuki_font";
 	const typingBoxAlpDrawText = function(){
 		// TypedとCandidateのテキストの長さを取得
 		g.font = typingBoxAlpFont;
@@ -306,8 +310,8 @@ function resultOnload(){
 
 	// textBox(共通部分)
 	objects.textBox = [];
-	const textColor1 = "#fff";
-	const textFont = "16px azuki_font";
+	let textColor1 = "#fff";
+	let textFont = "16px azuki_font";
 	const textBoxDrawText = function(){
 		g.fillStyle = textColor1;
 		g.font = textFont;
@@ -315,25 +319,127 @@ function resultOnload(){
 		g.textBaseline = "top";
 		g.fillText(this.text, this.posX, this.posY);
 	}
-
-	// 倒した数
+	let textTitleFont = "26px azuki_font";
+	const resultTitleTextBoxDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textTitleFont;
+		g.textAlign = "left";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX, this.posY);
+	}
+	objects.textTitle = new TextBox(268, 97, 104, 26, "rectangle", "リザルト");
 	objects.textBox.push(new TextBox(212, 171, 64, 16, "rectangle", `倒した数: `));
 	objects.textBox.push(new TextBox(317, 171, 50, 16, "rectangle", `x ${recordKillCount} 個`));
-	objects.textBox.push(new TextBox(212, 203, 64, 16, "rectangle", `タイム:        ${((endTime-startTime)/1000).toFixed(2)}`));
+	objects.textBox.push(new TextBox(212, 203, 64, 16, "rectangle", `タイム:        ${((endTime-startTime)/1000).toFixed(2)} 秒`));
 	objects.textBox.push(new TextBox(212, 239, 64, 16, "rectangle", `タイピング速度:  ${(recordTypeCount/((endTime-startTime)/1000)).toFixed(2)} type/s`));
 	objects.textBox.push(new TextBox(212, 275, 64, 16, "rectangle", `ミスタイプ:      ${recordMissTypeCount}回`));
 	objects.textBox.push(new TextBox(212, 311, 64, 16, "rectangle", `正確性:       ${(recordTypeCount/(recordMissTypeCount+recordTypeCount)*100).toFixed(4)} %`));
 
+	// ImageBox
+	objects.imgBox = [];
+	objects.imgBox.push(new ImageBox(296, 163, 17, 24, "rectangle", "./src/img/soul.png")); // 倒した数のところのsoul
+
 	// textBoxDrawText設定
+	objects.textTitle.drawText = resultTitleTextBoxDrawText;
 	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText = textBoxDrawText;}
 }
 function resultUpdate(){
+
 }
 function resultDraw(){
 	// bgImage
 	objects.bgImage.draw();
 	// 外枠
 	objects.GroundBox.draw();
+	// textTitle
+	objects.textTitle.drawText();
 	// textBox
 	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText();}
+	// imageBox
+	for(let i=0; i<objects.imgBox.length; i++){objects.imgBox[i].draw();}
+}
+
+// ランキング画面
+async function rankingOnload(){
+	objects = {};
+	input = [];
+	/* 別画面からゲーム画面へ移動したとき */
+	const bgImageSrc = "./src/img/background01.png"
+	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
+
+	// 外枠
+	//   サイズ
+	const BackGroundWidth = 500;
+	const BackGroundHeight = 400;
+	//    色
+	const BackGroundColor1 = "rgba(0,0,0,0.4)";
+	const BackGroundColor2 = "#FFF";
+	const BackGroundLineWidth = 1;
+	const BackGroundDraw = function(){
+		g.fillStyle = BackGroundColor1;
+		g.strokeStyle = BackGroundColor2;
+		g.lineWidth = BackGroundLineWidth;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.fill();
+		g.stroke();
+	}
+	objects.GroundBox = new TextBox(canvasSize[0]/2-BackGroundWidth/2, canvasSize[1]/2-BackGroundHeight/2, BackGroundWidth, BackGroundHeight, "rectangle", "");
+	objects.GroundBox.draw = BackGroundDraw;
+
+	// textBox(共通部分)
+	objects.textBox = [];
+	let textColor1 = "#fff";
+	let textFont = "16px azuki_font";
+	const textBoxDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textFont;
+		g.textAlign = "left";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX, this.posY);
+	}
+	let rankingTitleFont = "30px azuki_font";
+	const rankingTitleTextBoxDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = rankingTitleFont;
+		g.textAlign = "left";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX, this.posY);
+	}
+
+	// title
+	objects.textTitle = new TextBox(245, 60, 104, 26, "rectangle", "ランキング");
+	objects.textTitle.drawText = rankingTitleTextBoxDrawText;
+
+	// rankingData
+	objects.rankingData = [];
+	const querySnapshot = await window.querySnapshot(); //query(collection(db, "rankings"), orderBy("kill", "desc")));
+	const rankindDataFont = "30px azuki_font";
+	const rankindDataDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = rankindDataFont;
+		g.textAlign = "center";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX+this.width/2, this.posY);
+	}
+	querySnapshot.forEach((doc) => {
+		let data = doc.data();
+		let rankingData = new TextBox(canvasSize[0]/2-BackGroundWidth/2, 100+60, BackGroundWidth, 50, "rectangle", `${data.name}   ${data.kill}   ${1}`);
+		console.log(data);
+		rankingData.drawText = rankindDataDrawText;
+		objects.rankingData.push(rankingData);
+	});
+	
+}
+function rankingUpdate(){
+
+}
+function rankingDraw(){
+	// bgImage
+	objects.bgImage.draw();
+	// 外枠
+	objects.GroundBox.draw();
+	// title
+	objects.textTitle.drawText();
+	// rankingData
+	for(let i=0; i<objects.rankingData.length; i++){objects.rankingData[i].drawText();}
 }

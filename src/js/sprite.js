@@ -137,3 +137,14 @@ class Button extends Sprite{
 		this.drawText = function(){};
 	}
 }
+
+class KeyBoard extends Sprite{
+	constructor(posX, posY, width, height, shape){
+		
+	}
+}
+class Key extends Sprite{
+	constructor(posX, posY, width, height, r){
+		
+	}
+}
