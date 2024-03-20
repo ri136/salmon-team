@@ -74,10 +74,12 @@ function titleOnLoad(){
 		return true;
 	}
 	//   settingButton
+	/*
 	objects.buttons.settingButton = new Button(canvasSize[0]/2-buttonWidth/2, canvasSize[1]/2 + 26 + 55*2, buttonWidth, buttonHeight, "rectangle")
 	objects.buttons.settingButton.draw = buttonDraw;
 	objects.buttons.settingButton.drawText = buttonDrawText;
 	objects.buttons.settingButton.text = "設定"
+	*/
 }
 function titleUpdate(){
 	/* タイトル画面の動作処理 */
@@ -104,8 +106,8 @@ function titleDraw(){
 	objects.buttons.startButton.drawText();
 	objects.buttons.rankingButton.draw();
 	objects.buttons.rankingButton.drawText();
-	objects.buttons.settingButton.draw();
-	objects.buttons.settingButton.drawText();
+	// objects.buttons.settingButton.draw();
+	// objects.buttons.settingButton.drawText();
 }
 
 // ゲーム画面
