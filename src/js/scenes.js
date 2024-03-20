@@ -421,6 +421,7 @@ function resultOnload(){
 	}
 	// button
 	objects.buttons = {};
+	objects.images = {};
 	//   ランキング登録
 	const registRankingButton = new Button(214, 348, 128, 34, "rectangle");
 	registRankingButton.text = "ランキング登録";
@@ -435,6 +436,7 @@ function resultOnload(){
 
 	//    リスタート
 	const restartButton = new Button(350, 348, 34, 34, "rectangle");
+	const restartImg = new ImageBox(357, 355, 20, 20, "rectangle", "./src/img/reload.png");
 	restartButton.text = "";
 	restartButton.draw = buttonDraw;
 	// objects.restartButton.drawText = buttonDrawText;
@@ -453,9 +455,11 @@ function resultOnload(){
 		return true;
 	}
 	objects.buttons.restartButton = restartButton;
+	objects.images.restartImg = restartImg;
 
 	// back
 	const backButton = new Button(392, 348, 34, 34, "rectangle");
+	const backImg = new ImageBox(399, 355, 20, 20, "rectangle", "./src/img/exit.png");
 	backButton.text = "";
 	backButton.draw = buttonDraw;
 	backButton.onClick = function(){
@@ -464,6 +468,7 @@ function resultOnload(){
 		return true;
 	}
 	objects.buttons.backButton = backButton;
+	objects.images.backImg = backImg;
 }
 function resultUpdate(){
 	/* リザルト画面の動作処理 */
@@ -493,6 +498,7 @@ function resultDraw(){
 
 	// button
 	for(btnName in objects.buttons){objects.buttons[btnName].draw();objects.buttons[btnName].drawText();}
+	for(imgName in objects.images){objects.images[imgName].draw();objects.images[imgName].draw();}
 
 }
 
@@ -567,9 +573,41 @@ async function rankingOnload(){
 		objects.rankingData.push(rankingData);
 		index++;
 	});
+
+	// back
+	objects.buttons = {};
+	objects.images = {};
+
+	let backButtonPosX = 15
+	let backButtonPosY = 15
+	const backButton = new Button(backButtonPosX, backButtonPosY, 34, 34, "rectangle");
+	const backImg = new ImageBox(backButtonPosX+7, backButtonPosY+7, 20, 20, "rectangle", "./src/img/exit.png");
+	backButton.text = "";
+	backButton.draw = function(){
+		g.strokeStyle = textColor1;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.stroke()
+	}
+	backButton.onClick = function(){
+		scene = scenes.title;
+		titleOnLoad();
+		return true;
+	}
+	objects.buttons.backButton = backButton;
+	objects.images.backImg = backImg;
 	
 }
 function rankingUpdate(){
+	// クリック処理
+	for(let i=0; i<clickPos.length;i++){
+		for(btnName in objects.buttons){
+			/* オブジェクトに被った場所をクリックしていたらイベントを実行する */
+			if(objects.buttons[btnName].isPointInsideShape(clickPos[i][0], clickPos[i][1])){
+				let flg = objects.buttons[btnName].onClick(); // 画面遷移がある場合はreturn がtrue
+				if(flg){break;}
+			}
+		}
+	}
 	input = [];
 }
 function rankingDraw(){
@@ -581,6 +619,9 @@ function rankingDraw(){
 	objects.textTitle.drawText();
 	// rankingData
 	for(let i=0; i<objects.rankingData.length; i++){objects.rankingData[i].drawText();}
+	// back button
+	for(btnName in objects.buttons){objects.buttons[btnName].draw();objects.buttons[btnName].drawText();}
+	for(imgName in objects.images){objects.images[imgName].draw();objects.images[imgName].draw();}
 }
 
 // registRanking
