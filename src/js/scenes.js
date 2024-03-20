@@ -567,7 +567,7 @@ async function rankingOnload(){
 	let index=0;
 	querySnapshot.forEach((doc) => {
 		let data = doc.data();
-		let rankingData = new TextBox(canvasSize[0]/2-BackGroundWidth/2, 130+60*index, BackGroundWidth, 50, "rectangle", `${data.name}   ${data.kill}   ${1}`);
+		let rankingData = new TextBox(canvasSize[0]/2-BackGroundWidth/2, 130+60*index, BackGroundWidth, 50, "rectangle", `${data.name}   ${data.kill}`);
 		console.log(data);
 		rankingData.drawText = rankindDataDrawText;
 		objects.rankingData.push(rankingData);
@@ -715,7 +715,7 @@ function registRankingOnload(){
 		g.fillText(this.text, this.posX+this.width/2, this.posY+this.height/2);
 	}
 	objects.sendButton.onClick = function(){
-		window.sendScore(objects.nameTextBox.text, recordKillCount, 1);
+		window.sendScore(objects.nameTextBox.text, recordKillCount, recordClearTime);
 		scene = scenes.rankings;
 		rankingOnload();
 		return true;
