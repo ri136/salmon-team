@@ -140,7 +140,7 @@ function gameOnload(){
 	const typingBoxSrcTextBoxHeight = 18;
 	//   文字
 	const typingBoxSrcTextBoxColor1 = "#fff";
-	const typingBoxSrcTextBoxFont = "27px azuki_font";
+	const typingBoxSrcTextBoxFont = "18px azuki_font";
 	let typingBoxSrcTextBoxDrawText = function(){
 		g.font = typingBoxSrcTextBoxFont;
 		g.fillStyle = typingBoxSrcTextBoxColor1;
@@ -157,7 +157,7 @@ function gameOnload(){
 	//   文字
 	const typingBoxAlpTypedColor1 = "#fff";
 	const typingBoxAlpCandidateColor1 = "#aaa";
-	const typingBoxAlpFont = "22px azuki_font";
+	const typingBoxAlpFont = "18px azuki_font";
 	const typingBoxAlpDrawText = function(){
 		// TypedとCandidateのテキストの長さを取得
 		g.font = typingBoxAlpFont;
@@ -459,12 +459,14 @@ async function rankingOnload(){
 		g.textBaseline = "top";
 		g.fillText(this.text, this.posX+this.width/2, this.posY);
 	}
+	let index=0;
 	querySnapshot.forEach((doc) => {
 		let data = doc.data();
-		let rankingData = new TextBox(canvasSize[0]/2-BackGroundWidth/2, 100+60, BackGroundWidth, 50, "rectangle", `${data.name}   ${data.kill}   ${1}`);
+		let rankingData = new TextBox(canvasSize[0]/2-BackGroundWidth/2, 130+60*index, BackGroundWidth, 50, "rectangle", `${data.name}   ${data.kill}   ${1}`);
 		console.log(data);
 		rankingData.drawText = rankindDataDrawText;
 		objects.rankingData.push(rankingData);
+		index++;
 	});
 	
 }
