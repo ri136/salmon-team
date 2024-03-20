@@ -63,7 +63,7 @@ window.onload = async function() {
 
 function init(){
 	scene = scenes.title;
-	titleOnLoad(g);
+	titleOnLoad();
 	console.log("ebi mo oisii");
 }
 

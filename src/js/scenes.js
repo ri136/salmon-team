@@ -1,5 +1,5 @@
 // title画面
-function titleOnLoad(g){
+function titleOnLoad(){
 	objects = {};
 	/* 別画面からタイトル画面へ移動したとき */
 	const bgImageSrc = "./src/img/background01.png";
@@ -14,6 +14,9 @@ function titleOnLoad(g){
 	objects.title.font = "75px azuki_font";
 	let titleColor = "#FFF";
 	objects.title.drawText = function(){
+		console.log(this.font);
+		// const canvas = document.getElementById("gamecanvas");
+		// const g = canvas.getContext("2d");
 		g.font = this.font;
 		g.fillStyle = titleColor;
 		g.textBaseline = "middle"; // 基準をテキストの上下中央に
@@ -230,6 +233,25 @@ function gameUpdate(){
 	// 入力受け取り
 	typingObject.update_typing(input);
 	objects.typingBoxSrcTextBox.text = typingObject.s;
+	// その他ショートカットキー
+	for(let i=0; i<input.length; i++){
+		switch(input[i]){
+			case "Escape":
+				// ゲームをやり直す
+				scene = scenes.game;
+
+				// record初期化
+				date = new Date();
+				recordTypeCount = 0;
+				recordMissTypeCount = 0;
+				recordKillCount = 0;
+				startTime = 0;
+				endTime = 0;
+
+				gameOnload();
+				return true;
+		}
+	}
 	input = [];
 
 	// 敵 接触判定, 移動

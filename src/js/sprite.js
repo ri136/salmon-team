@@ -18,7 +18,7 @@ class Sprite {
 		/* (y,x)がオブジェクト内かを判定する */ 
 		switch(this.shape){
 			case "ellipse":
-				if (((pointY-this.posY)/this.height)**2+((pointX-this.posX)/this.width)**2 <= 1){
+				if (((pointY-this.height/2-this.posY)/this.height)**2+((pointX-this.posX)/this.width)**2 <= 1){
 					return true;
 				}else{
 					return false;
@@ -67,7 +67,7 @@ class Amida extends Sprite{
 			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
 		};
 
-		this.health = 1;
+		this.health = 3;
 		this.heartPosX = 15;
 		this.heartPosY = 15;
 		this.heartSpace = 30;
@@ -93,7 +93,7 @@ class Boss extends Sprite{
 
 		// enemy
 		this.enemySrc = "./src/img/soul.png";
-		this.enemyShape = "ellipse";
+		this.enemyShape = "rectangle";
 		this.enemyWidth = 35;
 		this.enemyHeight = 50;
 	}
