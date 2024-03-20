@@ -5,6 +5,7 @@ const scenes = {
 	title: "タイトル",
 	game: "ゲーム",
 	settings: "設定",
+	registRanking: "ランキング登録",
 	rankings: "順位表",
 	result: "結果"
 };
@@ -16,6 +17,7 @@ let recordMissTypeCount = 0;
 let recordKillCount = 0;
 let startTime = 0;
 let endTime = 0;
+let recordClearTime = 0;
 
 let g, scene;      // 
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
@@ -106,6 +108,10 @@ function gameloop() {
 			rankingDraw();
 			rankingUpdate();
 			break;
+		case scenes.registRanking:
+			registRankingDraw();
+			registRankingUpdate();
+			break
 	}
 	update();
 	draw();

@@ -248,6 +248,7 @@ function gameUpdate(){
 		// 記録
 		date = new Date();
 		endTime = date.getTime();
+		recordClearTime = endTime-startTime;
 		recordTypeCount += typingObject.typeCount;
 		recordMissTypeCount += typingObject.missTypeCount;
 
@@ -330,8 +331,8 @@ function resultOnload(){
 	objects.textTitle = new TextBox(268, 97, 104, 26, "rectangle", "リザルト");
 	objects.textBox.push(new TextBox(212, 171, 64, 16, "rectangle", `倒した数: `));
 	objects.textBox.push(new TextBox(317, 171, 50, 16, "rectangle", `x ${recordKillCount} 個`));
-	objects.textBox.push(new TextBox(212, 203, 64, 16, "rectangle", `タイム:        ${((endTime-startTime)/1000).toFixed(2)} 秒`));
-	objects.textBox.push(new TextBox(212, 239, 64, 16, "rectangle", `タイピング速度:  ${(recordTypeCount/((endTime-startTime)/1000)).toFixed(2)} type/s`));
+	objects.textBox.push(new TextBox(212, 203, 64, 16, "rectangle", `タイム:        ${(recordClearTime/1000).toFixed(2)} 秒`));
+	objects.textBox.push(new TextBox(212, 239, 64, 16, "rectangle", `タイピング速度:  ${(recordTypeCount/(recordClearTime/1000)).toFixed(2)} type/s`));
 	objects.textBox.push(new TextBox(212, 275, 64, 16, "rectangle", `ミスタイプ:      ${recordMissTypeCount}回`));
 	objects.textBox.push(new TextBox(212, 311, 64, 16, "rectangle", `正確性:       ${(recordTypeCount/(recordMissTypeCount+recordTypeCount)*100).toFixed(4)} %`));
 
@@ -356,29 +357,64 @@ function resultOnload(){
 		g.fillText(this.text, this.posX+this.width/2, this.posY+this.height/2);
 	}
 	// button
-	objects.buttons = [];
+	objects.buttons = {};
 	//   ランキング登録
-	const rankingButton = new Button(214, 348, 128, 34, "rectangle");
-	rankingButton.text = "ランキング登録";
-	rankingButton.draw = buttonDraw;
-	rankingButton.drawText = buttonDrawText;
-	objects.buttons.push(rankingButton);
+	const registRankingButton = new Button(214, 348, 128, 34, "rectangle");
+	registRankingButton.text = "ランキング登録";
+	registRankingButton.draw = buttonDraw;
+	registRankingButton.drawText = buttonDrawText;
+	registRankingButton.onClick = function(){
+		scene = scenes.registRanking;
+		registRankingOnload();
+		return true;
+	}
+	objects.buttons.registRankingButton = registRankingButton;
 
 	//    リスタート
 	const restartButton = new Button(350, 348, 34, 34, "rectangle");
 	restartButton.text = "";
 	restartButton.draw = buttonDraw;
 	// objects.restartButton.drawText = buttonDrawText;
-	objects.buttons.push(restartButton);
+	restartButton.onClick = function(){
+		scene = scenes.game;
+
+		// record初期化
+		date = new Date();
+		recordTypeCount = 0;
+		recordMissTypeCount = 0;
+		recordKillCount = 0;
+		startTime = 0;
+		endTime = 0;
+
+		gameOnload();
+		return true;
+	}
+	objects.buttons.restartButton = restartButton;
 
 	// back
 	const backButton = new Button(392, 348, 34, 34, "rectangle");
 	backButton.text = "";
 	backButton.draw = buttonDraw;
-	objects.buttons.push(backButton);
+	backButton.onClick = function(){
+		scene = scenes.title;
+		titleOnLoad();
+		return true;
+	}
+	objects.buttons.backButton = backButton;
 }
 function resultUpdate(){
-
+	/* リザルト画面の動作処理 */
+	// クリック処理
+	for(let i=0; i<clickPos.length;i++){
+		for(btnName in objects.buttons){
+			/* オブジェクトに被った場所をクリックしていたらイベントを実行する */
+			if(objects.buttons[btnName].isPointInsideShape(clickPos[i][0], clickPos[i][1])){
+				let flg = objects.buttons[btnName].onClick(); // 画面遷移がある場合はreturn がtrue
+				if(flg){break;}
+			}
+		}
+	}
+	clickPos = [];
 }
 function resultDraw(){
 	// bgImage
@@ -393,7 +429,7 @@ function resultDraw(){
 	for(let i=0; i<objects.imgBox.length; i++){objects.imgBox[i].draw();}
 
 	// button
-	for(let i=0; i<objects.buttons.length; i++){objects.buttons[i].draw();objects.buttons[i].drawText();}
+	for(btnName in objects.buttons){objects.buttons[btnName].draw();objects.buttons[btnName].drawText();}
 
 }
 
@@ -471,7 +507,7 @@ async function rankingOnload(){
 	
 }
 function rankingUpdate(){
-
+	input = [];
 }
 function rankingDraw(){
 	// bgImage
@@ -482,4 +518,145 @@ function rankingDraw(){
 	objects.textTitle.drawText();
 	// rankingData
 	for(let i=0; i<objects.rankingData.length; i++){objects.rankingData[i].drawText();}
+}
+
+// registRanking
+function registRankingOnload(){
+	objects = {};
+	input = [];
+	/* 別画面からゲーム画面へ移動したとき */
+	const bgImageSrc = "./src/img/background01.png"
+	objects.bgImage = new ImageBox(0, 0, canvasSize[0], canvasSize[1], "rectangle", bgImageSrc);
+
+	// 外枠
+	//   サイズ
+	const BackGroundWidth = 280;
+	const BackGroundHeight = 335;
+	//    色
+	const BackGroundColor1 = "rgba(0,0,0,0.4)";
+	const BackGroundColor2 = "#FFF";
+	const BackGroundLineWidth = 1;
+	const BackGroundDraw = function(){
+		g.fillStyle = BackGroundColor1;
+		g.strokeStyle = BackGroundColor2;
+		g.lineWidth = BackGroundLineWidth;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.fill();
+		g.stroke();
+	}
+	objects.GroundBox = new TextBox(canvasSize[0]/2-BackGroundWidth/2, canvasSize[1]/2-BackGroundHeight/2, BackGroundWidth, BackGroundHeight, "rectangle", "");
+	objects.GroundBox.draw = BackGroundDraw;
+
+	// textBox(共通部分)
+	objects.textBox = [];
+	let textColor1 = "#fff";
+	let textFont = "16px azuki_font";
+	const textBoxDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textFont;
+		g.textAlign = "left";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX, this.posY);
+	}
+	let registRankingTitleFont = "20px azuki_font";
+	const registRankingTitleTextBoxDrawText = function(){
+		g.fillStyle = textColor1;
+		g.font = registRankingTitleFont;
+		g.textAlign = "center";
+		g.textBaseline = "middle";
+		g.fillText(this.text, this.posX+this.width/2, this.posY+this.height/2);
+	}
+	// title
+	objects.textTitle = new TextBox(canvasSize[0]/2-BackGroundWidth/2, 103, BackGroundWidth, 26, "rectangle", "ランキング登録");
+	objects.textTitle.drawText = registRankingTitleTextBoxDrawText;
+
+	objects.textBox.push(new TextBox(canvasSize[0]/2-BackGroundWidth/2, 184, BackGroundWidth, 35, "rectangle", "登録する名前"));
+	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textFont;
+		g.textAlign = "center";
+		g.textBaseline = "top";
+		g.fillText(this.text, this.posX+this.width/2, this.posY);
+	}}
+	// nameTextBox
+	const nameTextBoxWidth = 144;
+	objects.nameTextBox = new TextBox(canvasSize[0]/2-nameTextBoxWidth/2, 220, nameTextBoxWidth, 35, "rectangle", "player");
+	objects.nameTextBox.drawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textFont;
+		g.textAlign = "left";
+		g.textBaseline = "middle";
+		g.fillText(this.text, this.posX+this.width*0.1, this.posY+this.height/2);
+	};
+	objects.nameTextBox.draw = function(){
+		g.fillStyle = textColor1;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.stroke();
+	}
+
+	// ボタン
+	const sendButtonWidth = 145;
+	objects.sendButton = new Button(canvasSize[0]/2-sendButtonWidth/2, 348, sendButtonWidth, 34, "rectangle");
+	objects.sendButton.text = "送信ボタン";
+	objects.sendButton.draw = function(){
+		g.strokeStyle = textColor1;
+		createRoundRectPath(this.posX, this.posY, this.width, this.height, 4);
+		g.stroke();
+	}
+	objects.sendButton.drawText = function(){
+		g.fillStyle = textColor1;
+		g.font = textFont;
+		g.textAlign = "center";
+		g.textBaseline = "middle";
+		g.fillText(this.text, this.posX+this.width/2, this.posY+this.height/2);
+	}
+	objects.sendButton.onClick = function(){
+		window.sendScore(objects.nameTextBox.text, recordKillCount, 1);
+		scene = scenes.rankings;
+		rankingOnload();
+		return true;
+	}
+
+}
+function registRankingUpdate(){
+	/* ランキング登録画面の動作処理 */
+	// クリック処理
+	for(let i=0; i<clickPos.length;i++){
+		if(objects.sendButton.isPointInsideShape(clickPos[i][0], clickPos[i][1])){
+			let flg = objects.sendButton.onClick();
+			if(flg){break;}
+		}
+
+	}
+	clickPos = [];
+	// 
+	for(let i=0; i<input.length; i++){
+		console.log(input[i]);
+		if(input[i].length==1){
+			objects.nameTextBox.text += input[i];
+		} else{
+			switch(input[i]){
+				case "Backspace":
+					objects.nameTextBox.text = objects.nameTextBox.text.slice(0,-1);
+					break;
+			}
+		}
+	}
+	input = []
+}
+function registRankingDraw(){
+	// bgImage
+	objects.bgImage.draw();
+	// 外枠
+	objects.GroundBox.draw();
+	// textTitle
+	objects.textTitle.drawText();
+	// nameTextBox
+	objects.nameTextBox.draw();
+	objects.nameTextBox.drawText();
+	// その他テキスト
+	for(let i=0; i<objects.textBox.length; i++){objects.textBox[i].drawText();}
+	// sendButton
+	objects.sendButton.draw();
+	objects.sendButton.drawText();
 }

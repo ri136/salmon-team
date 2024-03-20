@@ -117,7 +117,7 @@ class Enemy extends Sprite{
 
 		this.move = function(){
 			if(this.isLive){
-				this.posX -= 1;
+				this.posX -= 2;
 			}
 		};
 
@@ -140,11 +140,11 @@ class Button extends Sprite{
 
 class KeyBoard extends Sprite{
 	constructor(posX, posY, width, height, shape){
-		
+
 	}
 }
 class Key extends Sprite{
 	constructor(posX, posY, width, height, r){
-		
+
 	}
 }

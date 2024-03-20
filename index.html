@@ -35,12 +35,12 @@
 			console.log(doc.data());
 		}); 
 		*/
-
-		async function sendScore(name, kill, time){
+		window.sendScore = async function sendScore(name, kill, time){
 			try {
 				const docRef = await addDoc(collection(db, "rankings"), {
-					"name": this.name,
-					"kill": this.kill,
+					"name": name,
+					"kill": kill,
+					"time": time
 				});
 				console.log("Document written with ID: ", docRef.id);
 			} catch (e) {
