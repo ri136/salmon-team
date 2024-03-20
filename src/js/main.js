@@ -23,11 +23,17 @@ let g, scene;      //
 let clickPos = []; // クリックされた場所のcanvasからの相対座標が格納される.
 let objects = {};  // 
 let input = []; // キー入力
+let typeSpeed = 1.0;
+let typeSpeedLevel = 1;
 
 // ゲーム画面
 let typingJson;
 let pharasesJson;
 let typingObject; // まだ入力されてない文字列
+
+// 音楽
+let bgm;
+let se;
 
 /* Webページ読み込み時の処理 */
 window.onload = async function() {
@@ -50,7 +56,8 @@ window.onload = async function() {
 	// typingJson読み込み
 	var response = await fetch('./src/others/phrases.json');
 	pharasesJson = await response.json();
-
+	// 曲読み込み
+	se = new Audio('./src/se/typing_sound.wav');
 
 	// ゲーム開始
 	const paths = ['./src/img/background01.png', './src/img/amida.png'];
@@ -59,6 +66,7 @@ window.onload = async function() {
 	init();
 	setInterval("gameloop()", 1000 / fps);
 	console.log("maguro oisii");
+
 };
 
 function init(){

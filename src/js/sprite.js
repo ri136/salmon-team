@@ -97,8 +97,8 @@ class Boss extends Sprite{
 		this.enemyWidth = 35;
 		this.enemyHeight = 50;
 	}
-	addEnemy(){
-		var enemy = new Enemy(this.posX - 50, 223, this.enemyWidth, this.enemyHeight, this.enemyShape, this.enemySrc);
+	addEnemy(moveSpeed){
+		var enemy = new Enemy(this.posX - 50, 223, this.enemyWidth, this.enemyHeight, this.enemyShape, this.enemySrc, moveSpeed);
 		objects.enemys.push(enemy);
 	}
 
@@ -106,18 +106,19 @@ class Boss extends Sprite{
 }
 // 敵
 class Enemy extends Sprite{
-	constructor(posX, posY, width, height, shape, bodyImgSrc){
+	constructor(posX, posY, width, height, shape, bodyImgSrc, moveSpeed){
 		super(posX, posY, width, height, shape);
 		this.bodyImg = new Image();
 		this.bodyImg.src = bodyImgSrc;
 		this.isLive = true;
+		this.moveSpeed = moveSpeed;
 		this.draw = function(){
 			g.drawImage(this.bodyImg, this.posX, this.posY, this.width, this.height);
 		};
 
 		this.move = function(){
 			if(this.isLive){
-				this.posX -= 2;
+				this.posX -= this.moveSpeed;
 			}
 		};
 

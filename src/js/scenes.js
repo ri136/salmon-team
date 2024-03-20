@@ -14,7 +14,6 @@ function titleOnLoad(){
 	objects.title.font = "75px azuki_font";
 	let titleColor = "#FFF";
 	objects.title.drawText = function(){
-		console.log(this.font);
 		// const canvas = document.getElementById("gamecanvas");
 		// const g = canvas.getContext("2d");
 		g.font = this.font;
@@ -200,6 +199,26 @@ function gameOnload(){
 
 	// 敵
 	objects.enemys = [];
+
+	// 倒した数
+	objects.soulImg = new ImageBox(551, 10, 22.5, 32, "rectangle", "./src/img/soul.png");
+	objects.xText = new TextBox(600, 17, 50, 24, "rectangle", "x");
+	objects.xText.drawText = function(){
+		g.font = typingBoxSrcTextBoxFont;
+		g.fillStyle = typingBoxSrcTextBoxColor1;
+		g.textBaseline = "top"; // 基準をテキストの上下中央に
+		g.textAlign = "left"; // 基準をテキストの左右中央に
+		g.fillText(this.text, this.posX, this.posY); // 中央に文字を配置
+	}
+	objects.killCountText = new TextBox(600, 17, 24, 24, "rectangle", "0");
+	objects.killCountText.drawText = function(){
+		g.font = typingBoxSrcTextBoxFont;
+		g.fillStyle = typingBoxSrcTextBoxColor1;
+		g.textBaseline = "top"; // 基準をテキストの上下中央に
+		g.textAlign = "right"; // 基準をテキストの左右中央に
+		g.fillText(this.text, this.posX+this.width, this.posY); // 中央に文字を配置
+	}
+
 	
 	// typingObject
 	typingObject = new TypingObject({}, "", "");
@@ -216,6 +235,19 @@ function gameUpdate(){
 			// 記録
 			recordKillCount += 1;
 			objects.enemys.shift();
+			if(typeSpeed<=2){
+				typeSpeed += 0.1;
+			}else if(typeSpeed<=3.5){
+				typeSpeed += 0.15;
+				typeSpeedLevel = 2;
+			}else if(typeSpeed<=5){
+				typeSpeed += 0.15;
+				typeSpeedLevel = 3;
+			}else{
+				typeSpeed += 0.2;
+				typeSpeedLevel = 4;
+			}
+			console.log(`typeSpeed: ${typeSpeed}`)
 		}
 
 		// 記録
@@ -223,11 +255,12 @@ function gameUpdate(){
 		recordMissTypeCount += typingObject.missTypeCount;
 
 		// pharaseJson から例文を選ぶ
-		const pharase = pharasesJson["normal"][2][Math.floor(Math.random()*pharasesJson["normal"][2].length)];
+		const pharase = pharasesJson["normal"][typeSpeedLevel][Math.floor(Math.random()*pharasesJson["normal"][typeSpeedLevel].length)];
 		typingObject = new TypingObject(typingJson, pharase[0], pharase[1]);
 
 		// 敵を追加する
-		objects.boss.addEnemy();
+		let moveSpeed = (typeSpeed/(pharase[1].length*2))*350/fps
+		objects.boss.addEnemy(moveSpeed);
 	}
 
 	// 入力受け取り
@@ -264,6 +297,9 @@ function gameUpdate(){
 	for(let i=0; i<objects.enemys.length; i++){
 		objects.enemys[i].move();
 	}
+
+	// キルカウント
+	objects.killCountText.text = String(recordKillCount);
 
 	// 終了条件
 	if(objects.amida.health <= 0){
@@ -302,6 +338,11 @@ function gameDraw(){
 	for(let i=0; i<objects.enemys.length; i++){
 		objects.enemys[i].draw();
 	}
+
+	// soul
+	objects.soulImg.draw();
+	objects.xText.drawText();
+	objects.killCountText.drawText();
 }
 
 //リザルト画面
@@ -653,7 +694,6 @@ function registRankingUpdate(){
 	clickPos = [];
 	// 
 	for(let i=0; i<input.length; i++){
-		console.log(input[i]);
 		if(input[i].length==1){
 			objects.nameTextBox.text += input[i];
 		} else{

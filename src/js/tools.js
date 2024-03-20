@@ -120,6 +120,8 @@ class TypingObject {
             if (is_typed) {
                 // タイプ
                 this.typeCount++;
+                let seLocal = new Audio("./src/se/typing_sound.wav");
+                seLocal.play();
             } else {
                 // ミスタイプ
                 this.missTypeCount++;
